@@ -1,173 +1,251 @@
 # 🛍️ ABFRL AI-Driven Omnichannel Conversational Sales Agent
 
-![Status](https://img.shields.io/badge/Status-Prototype-blue)
-![Tech](https://img.shields.io/badge/Stack-Node.js%20|%20LangChain%20|%20OpenAI-green)
-![Category](https://img.shields.io/badge/Category-Agentic%20AI-orange)
-
 An **Agentic AI Sales Assistant** designed for ABFRL Retail that delivers a **seamless, human-like, omnichannel shopping experience** across web, mobile apps, messaging platforms, and in-store kiosks.
 
-This system emulates a **top-tier sales associate**, orchestrating multiple specialized AI Worker Agents to guide customers from product discovery to checkout—maintaining session continuity across all channels.
+This system emulates a **top-tier sales associate**, orchestrating multiple specialized AI Worker Agents to guide customers from product discovery to checkout and post-purchase support — all while maintaining session continuity across channels.
 
 ---
 
 ## 🚀 Problem Statement
 
-Retail customers face fragmented experiences when switching between channels (Online ↔ In-Store). Sales associates often lack bandwidth, leading to:
-*   **Fragmented Context:** Shopping carts and conversations don't follow the user from App to Store.
-*   **Missed Opportunities:** Lack of personalized upsell/cross-sell suggestions.
-*   **High Friction:** Complex checkout processes reduce conversion rates.
+Retail customers face fragmented experiences when switching between:
+- Online browsing
+- Mobile apps
+- Messaging platforms (WhatsApp / Telegram)
+- In-store kiosks or POS systems
 
-## 🎯 Solution Overview
-
-We propose an **Agentic AI Architecture** where a central **Sales Agent** orchestrates multiple **Worker Agents** to handle specific retail tasks.
-
-### Key Capabilities
-*   ✅ **Omnichannel Continuity:** Start on WhatsApp, finish on a Kiosk.
-*   ✅ **Consultative Sales:** Uses psychological prompts to increase AOV.
-*   ✅ **Real-Time Orchestration:** Inventory, Payments, and Fulfillment handling.
+Sales associates have limited bandwidth, resulting in:
+- Missed upsell & cross-sell opportunities
+- Lower conversion rates
+- Reduced Average Order Value (AOV)
 
 ---
 
-## 🧠 Agentic Architecture & Flow
+## 🎯 Solution Overview
 
-### 1. High-Level System Design
-The **Sales Agent (Orchestrator)** acts as the brain, delegating tasks to specialized workers based on user intent.
+We propose an **Agentic AI Architecture** where a central **Sales Agent** orchestrates multiple **Worker Agents**, enabling:
 
-```mermaid
-graph TD
-    User[👤 Customer] -->|Chat/Voice| API[⚡ API Gateway]
-    API --> SalesAgent[🤖 SALES AGENT (Orchestrator)]
-    
-    SalesAgent -->|Delegates Task| Router{Select Agent}
-    
-    Router -->|Product Search| RecAgent[🛍️ Recommendation Agent]
-    Router -->|Stock Check| InvAgent[📦 Inventory Agent]
-    Router -->|Checkout| PayAgent[💳 Payment Agent]
-    Router -->|Shipping| ShipAgent[🚚 Fulfillment Agent]
-    Router -->|Points/Coupons| LoyAgent[💎 Loyalty Agent]
-    
-    RecAgent & InvAgent & PayAgent & ShipAgent & LoyAgent -->|Result| SalesAgent
-    SalesAgent -->|Final Response| User
-    
-    subgraph Memory Layer
-    Redis[(🧠 Session Memory)]
-    VectorDB[(📚 Semantic Search)]
-    end
-    
-    SalesAgent -.-> Redis
-    RecAgent -.-> VectorDB
-2. Conversation Flow Example
-How the system handles a "Out of Stock" edge case seamlessly:
-code
-Mermaid
-sequenceDiagram
-    participant U as User
-    participant SA as Sales Agent
-    participant IA as Inventory Agent
-    participant RA as Recommendation Agent
+- Unified omnichannel conversations
+- Personalized recommendations
+- Real-time inventory visibility
+- Seamless payment & fulfillment
+- Intelligent post-purchase engagement
 
-    U->>SA: "I want the Navy Blue Blazer in Size M."
-    SA->>IA: Check Stock (SKU: 123, Size: M)
-    IA-->>SA: Status: Out of Stock
-    SA->>RA: Get Alternatives (Style: Blazer, Color: Blue/Black)
-    RA-->>SA: Returns: Charcoal Slim Fit Blazer
-    SA->>U: "The Navy is out of stock, but the Charcoal Slim Fit is available and trending. Shall I show you?"
-🤖 AI Roles & Responsibilities
-Agent Role	Responsibility	Tools & APIs
-Sales Agent	Orchestrator, Conversation Management, Psychology	GPT-4o, Session Memory
-Recommendation	Styling advice, Bundle creation	Vector Search, Catalog API
-Inventory	Real-time stock check (Warehouse + Store)	Inventory DB, Store APIs
-Payment	Checkout generation, Wallet integration	Stripe/Razorpay Mock, UPI
-Fulfillment	Click-&-Collect vs. Home Delivery logic	Logistics API
-Loyalty	Points redemption, Coupon application	CRM Database
-🛠️ Technology Stack
-Core AI: OpenAI GPT-4o, LangChain, LangGraph
-Backend: Node.js, Express.js
-Database: MongoDB (User/Product Data), Redis (Session Caching)
-Vector Store: OpenAI Embeddings (for semantic product search)
-Interfaces (Simulated): Web Chat, WhatsApp (Twilio Stub), Kiosk
-📁 Project Structure
-code
-Bash
+---
+
+## 🧠 Agentic Architecture
+
+Customer (Any Channel)
+↓
+SALES AGENT (LLM Orchestrator)
+↓
+┌────────────┬────────────┬────────────┬────────────┐
+│Recommendation│ Inventory │ Payment │ Fulfillment│
+│ Agent │ Agent │ Agent │ Agent │
+└────────────┴────────────┴────────────┴────────────┘
+↓
+Loyalty & Post-Purchase Support
+
+markdown
+Copy code
+
+---
+
+## 🤖 AI Roles & Responsibilities
+
+### 🧑‍💼 Sales Agent (Orchestrator)
+- Manages multi-channel conversation flow
+- Maintains session continuity across devices
+- Routes tasks to Worker Agents
+- Uses consultative sales psychology to increase AOV
+
+### 🧠 Worker Agents
+```
+| Agent | Responsibility |
+|-----|---------------|
+| Recommendation Agent | Personalized product & bundle suggestions |
+| Inventory Agent | Real-time stock across warehouses & stores |
+| Payment Agent | Handles UPI, cards, wallets & retries |
+| Fulfillment Agent | Ship-to-home / click-&-collect / reserve-in-store |
+| Loyalty & Offers Agent | Applies coupons, loyalty points, pricing |
+| Post-Purchase Agent | Returns, exchanges, feedback & tracking |
+```
+---
+
+## 🛠️ Technology Stack
+
+### 🔹 AI & Agent Framework
+- **OpenAI GPT-4 / GPT-4o** – Core conversational intelligence
+- **LangChain** – Prompt & tool orchestration
+- **LangGraph / CrewAI** – Agentic workflows
+- **OpenAI Embeddings** – Semantic memory
+- **Redis** – Session & conversation memory
+
+### 🔹 Backend & APIs
+- **Node.js**
+- **Express.js**
+- **MongoDB** – Customer, product & order data
+- **REST APIs** – Mocked services
+- **WebSockets** – Real-time updates
+- **JWT Authentication**
+
+### 🔹 Omnichannel Interfaces (Demo Level)
+- **Web Chat** – React
+- **Mobile App** – React Native
+- **WhatsApp / Telegram** – Mock Twilio / Bot APIs
+- **In-Store Kiosk** – React Web
+- **Voice Assistant** – Whisper (STT) + TTS (optional)
+
+### 🔹 Simulated Enterprise Services
+- Product Catalog API (Mock)
+- Inventory Server (Real-time simulation)
+- Payment Gateway Stub
+- Loyalty & Promotions Rules Engine
+- POS Integration Simulator
+
+---
+
+## 📁 Project Structure
+```
 abfrl-sales-agent/
 │
-├── src/
-│   ├── agents/               # AI Worker Definitions
-│   │   ├── sales.agent.js    # Main Orchestrator
-│   │   ├── recommendation.agent.js
-│   │   ├── inventory.agent.js
-│   │   ├── payment.agent.js
-│   │   └── fulfillment.agent.js
-│   │
-│   ├── config/               # LLM & DB Configs
-│   ├── routes/               # API Endpoints
-│   ├── services/             # Business Logic (Mock Services)
-│   ├── utils/                # Memory & Session Utils
-│   ├── index.js              # Entry Point
-│   └── server.js             # Express App Setup
-│
-├── .env                      # Environment Variables
+├── README.md
 ├── package.json
-└── README.md
-▶️ Getting Started
-1. Prerequisites
-Node.js (v18+)
-MongoDB (Local or Atlas)
-Redis (Optional, for caching)
-OpenAI API Key
-2. Installation
-code
-Bash
-# Clone the repository
-git clone https://github.com/your-username/abfrl-sales-agent.git
+├── .env
+├── .gitignore
+│
+├── src/
+│ ├── index.js # App entry point
+│ ├── server.js # Express server
+│ │
+│ ├── config/
+│ │ ├── env.js
+│ │ └── llm.config.js
+│ │
+│ ├── agents/
+│ │ ├── sales.agent.js
+│ │ ├── recommendation.agent.js
+│ │ ├── inventory.agent.js
+│ │ ├── payment.agent.js
+│ │ ├── fulfillment.agent.js
+│ │ └── loyalty.agent.js
+│ │
+│ ├── routes/
+│ │ ├── chat.route.js
+│ │ ├── inventory.route.js
+│ │ └── payment.route.js
+│ │
+│ ├── services/
+│ │ ├── product.service.js
+│ │ ├── inventory.service.js
+│ │ └── loyalty.service.js
+│ │
+│ └── utils/
+│ └── session.util.js
 
-# Navigate to directory
-cd abfrl-sales-agent
 
-# Install dependencies
-npm install
-3. Configuration
-Create a .env file in the root directory:
-code
-Env
+```
+yaml
+Copy code
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the root directory:
+
 PORT=5000
-OPENAI_API_KEY=sk-your_key_here
+OPENAI_API_KEY=your_openai_api_key
 MONGODB_URI=mongodb://localhost:27017/abfrl-agent
 REDIS_URL=redis://localhost:6379
-JWT_SECRET=your_secret_key
-4. Run the Application
-code
-Bash
-# Development mode (with nodemon)
-npm run dev
 
-# Production mode
-npm start
-Server will start at http://localhost:5000
-🧪 Testing the API
-You can test the conversational flow via Postman or Curl:
-Endpoint: POST /api/chat
-Payload:
-code
-JSON
-{
-  "session_id": "user_123_mobile",
-  "message": "I need a formal shirt for a wedding, budget 2000 rupees."
-}
+r
+Copy code
+
+---
+
+## ▶️ How to Run the Project Locally
+
+### 1️⃣ Navigate to the project directory
+```bash
+cd C:\Users\vsran\OneDrive\Documents\Desktop\hackathons\EY\agent_last\abfrl-sales-agent
+2️⃣ Install dependencies
+bash
+Copy code
+npm install
+3️⃣ Start the development server
+bash
+Copy code
+npm run dev
+🌐 Application Ports
+Service	Port
+Backend API	http://localhost:5000
+WebSocket	ws://localhost:5000
+Mock APIs	Same server
+
+🔄 Omnichannel Session Continuity
+Each user session is identified by:
+
+ini
+Copy code
+session_id = user_id + device_id
+Enables seamless transitions:
+
+Mobile App → In-Store Kiosk
+
+Web Chat → WhatsApp
+
+Voice → Web
+
+⚠️ Edge Case Handling
+Scenario	System Response
+Product out of stock	Suggest alternatives
+Payment failure	Retry / change method
+Store unavailable	Ship-to-home
+Size issue	Exchange flow
+Order modification	Agent-guided update
+
 📈 Business Impact
-💰 Increased AOV: Intelligent cross-selling (e.g., "Add a tie to this shirt for 10% off").
-📉 Lower Drop-offs: Instant answers to "Is this in stock?" prevents tab switching.
-🔄 Unified Data: Single view of customer preferences across App and Store.
-👥 Contributors
-Team ABFRL Sales Agent - EY Hackathon Challenge V
-Category: Retail | Agentic AI | Omnichannel Experience
-Note for Judges: This project uses mocked enterprise services (Inventory, Payment) to demonstrate the Orchestration Capability of the Agentic Architecture.
-code
-Code
-### What I Improved in this Version:
-1.  **Added Mermaid Diagrams:** This satisfies your request for "flow diagrams." GitHub renders the code blocks starting with `mermaid` as visual charts.
-2.  **Badges:** Added status badges at the top for a professional look.
-3.  **Cleaned Directory Tree:** Removed the clutter and made it easier to read.
-4.  **Sequence Diagram:** Added a specific diagram showing *how* the agents talk to each other (The "Out of Stock" scenario).
-5.  **Installation Instructions:** Removed the specific `C:\Users...` path (which would break on other people's computers) and replaced it with generic `git clone` commands.
-6.  **Formatting:** Used tables for the Roles & Responsibilities section for better readability.
+📊 Increased Average Order Value (AOV)
+
+📈 Higher conversion rates
+
+🧠 Personalized customer journeys
+
+👥 Reduced in-store staff load
+
+❤️ Improved loyalty & retention
+
+📦 Deliverable
+✔️ 5-Slide PPT
+✔️ Agentic AI Architecture
+✔️ Omnichannel Demo Flow
+✔️ End-to-End Orchestration
+✔️ Edge-Case Handling
+
+🏁 Final Note
+This project demonstrates how Agentic AI can transform retail experiences by combining:
+
+Human-like conversations
+
+Intelligent orchestration
+
+Enterprise-grade modularity
+
+Built specifically for ABFRL Retail – EY Hackathon Challenge V.
+
+👨‍💻 Author: Team ABFRL Sales Agent
+🏆 Category: Retail | Agentic AI | Omnichannel Experience
+
+yaml
+Copy code
+
+---
+
+If you want next, I can:
+- Align this README exactly with your **current code**
+- Create the **5-slide PPT content**
+- Write **Sales Agent prompts**
+- Prepare a **live demo narration script**
+
+Just tell me 👉 **next step**
