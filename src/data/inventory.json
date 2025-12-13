@@ -1,0 +1,15 @@
+{
+  "SHIRT001": {
+    "online": 20,
+    "stores": {
+      "Orion Mall": 5,
+      "Forum Mall": 0
+    }
+  },
+  "TROUSER001": {
+    "online": 10,
+    "stores": {
+      "Orion Mall": 2
+    }
+  }
+}

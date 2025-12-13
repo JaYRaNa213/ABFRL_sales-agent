@@ -1,0 +1,14 @@
+[
+  {
+    "sku": "SHIRT001",
+    "name": "Formal Slim Fit Shirt",
+    "category": "Formal Wear",
+    "price": 2499
+  },
+  {
+    "sku": "TROUSER001",
+    "name": "Formal Trousers",
+    "category": "Formal Wear",
+    "price": 2999
+  }
+]

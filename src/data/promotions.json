@@ -1,0 +1,8 @@
+{
+  "GOLD": {
+    "discountPercent": 10
+  },
+  "SILVER": {
+    "discountPercent": 5
+  }
+}
