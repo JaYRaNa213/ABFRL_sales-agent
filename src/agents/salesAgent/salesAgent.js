@@ -8,10 +8,12 @@ import { paymentAgent } from "../paymentAgent/paymentAgent.js";
 import { fulfillmentAgent } from "../fulfillmentAgent/fulfillmentAgent.js";
 import { postPurchaseAgent } from "../postPurchaseAgent/postPurchaseAgent.js";
 
+import { detectIntentLLM } from "./intentDetector.llm.js";
+
 export async function salesAgent(message, context) {
   context.conversationHistory.push({ role: "user", message });
 
-  const intent = detectIntent(message);
+  const intent = detectIntentLLM(message);
   context.intent = intent;
 
   let result;
