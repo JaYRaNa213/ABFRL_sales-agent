@@ -34,7 +34,7 @@ We propose an **Agentic AI Architecture** where a central **Sales Agent** orches
 ---
 
 ## 🧠 Agentic Architecture
-
+```
 Customer (Any Channel)
 ↓
 SALES AGENT (LLM Orchestrator)
@@ -48,7 +48,7 @@ Loyalty & Post-Purchase Support
 
 markdown
 Copy code
-
+```
 ---
 
 ## 🤖 AI Roles & Responsibilities

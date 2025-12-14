@@ -1,10 +1,24 @@
-import { processPayment } from "../../services/paymentGateway.service.js";
+import { triggerWorkflow } from "../../workflows/n8nHooks.js";
 
-export async function paymentAgent(context) {
-  const totalAmount = context.cart.reduce((sum, i) => sum + i.price, 0);
-  const payment = processPayment(totalAmount);
+export async function paymentAgent(userId, orderId, amount) {
+  try {
+    // ... your payment logic
+    const paymentSuccess = true; // simulate
 
-  context.paymentStatus = payment.status;
+    if (paymentSuccess) {
+      // Trigger n8n workflow
+      await triggerWorkflow("payment-success", {
+        userId,
+        orderId,
+        amount,
+      });
+    }
 
-  return payment;
+    return { success: paymentSuccess };
+  } catch (err) {
+    console.error("Payment failed:", err);
+    
+    await triggerWorkflow("payment-failure", { userId, orderId });
+    return { success: false };
+  }
 }
