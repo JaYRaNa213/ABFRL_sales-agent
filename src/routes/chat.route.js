@@ -1,7 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
 import { v4 as uuid } from "uuid";
 
-import { getSession, updateSession } from "../context/sessionStore.js";
+import { getSession, updateSession } from "../context/sessionStore.redis.js";
 import { salesAgent } from "../agents/salesAgent/salesAgent.js";
 import { triggerWorkflow } from "../workflows/n8nHooks.js";
 

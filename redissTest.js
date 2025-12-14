@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
 
-import Redis from "ioredis";
+import { redis } from "../config/redis.js";
 
 const redis = new Redis(process.env.REDIS_URL, {
   tls: {}, // ensures TLS is used
