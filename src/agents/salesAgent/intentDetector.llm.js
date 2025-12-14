@@ -1,4 +1,5 @@
 import { runLLM } from "../../llm/llmClient.js";
+import { detectIntent } from "./intentDetector.js";
 
 const SYSTEM_PROMPT = `
 You are a retail sales AI.
@@ -14,12 +15,24 @@ Return ONLY the intent string.
 `;
 
 export async function detectIntentLLM(message) {
-  const intent = await runLLM({
-    systemPrompt: SYSTEM_PROMPT,
-    userPrompt: message,
-    temperature: 0,
-    maxTokens: 20,
-  });
+  try {
+    const intent = await runLLM({
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt: message,
+      temperature: 0,
+      maxTokens: 20,
+    });
 
-  return intent.trim();
+    // Safety check
+    if (!intent || typeof intent !== "string") {
+      throw new Error("Invalid LLM intent response");
+    }
+
+    return intent.trim();
+  } catch (error) {
+    console.warn("⚠️ LLM intent detection failed. Falling back to rule-based intent.");
+
+    // ✅ Enterprise fallback (NEVER fail the agent)
+    return detectIntent(message);
+  }
 }

@@ -11,15 +11,30 @@ import { detectIntentLLM } from "./intentDetector.llm.js";
 import { getCachedIntent, cacheIntent } from "./intentCache.js";
 
 export async function salesAgent(message, context) {
-  // -----------------------------
-  // 1️⃣ Store conversation safely
-  // -----------------------------
-  context.conversationHistory.push({ role: "user", message });
+  // -------------------------------------------------
+  // 0️⃣ ENTERPRISE CONTEXT NORMALIZATION (CRITICAL)
+  // -------------------------------------------------
+  context.conversationHistory = context.conversationHistory || [];
+  context.cart = context.cart || [];
+  context.stage = context.stage || "DISCOVERY";
+  context.intent = context.intent || null;
+  context.sessionId = context.sessionId || "unknown";
+  context.channel = context.channel || "web";
+
+  // -------------------------------------------------
+  // 1️⃣ Store Conversation Safely
+  // -------------------------------------------------
+  context.conversationHistory.push({
+    role: "user",
+    message,
+    timestamp: new Date().toISOString()
+  });
+
   context.lastMessage = message;
 
-  // -----------------------------
-  // 2️⃣ Prompt Injection Guard
-  // -----------------------------
+  // -------------------------------------------------
+  // 2️⃣ Prompt Injection Guard (Security)
+  // -------------------------------------------------
   const lowerMessage = message.toLowerCase();
   if (
     lowerMessage.includes("ignore previous") ||
@@ -32,9 +47,9 @@ export async function salesAgent(message, context) {
     );
   }
 
-  // -----------------------------
-  // 3️⃣ Intent Detection (Cached)
-  // -----------------------------
+  // -------------------------------------------------
+  // 3️⃣ Intent Detection (Cached First)
+  // -------------------------------------------------
   let intent = await getCachedIntent(context.sessionId);
 
   if (!intent) {
@@ -44,9 +59,9 @@ export async function salesAgent(message, context) {
 
   context.intent = intent;
 
-  // -----------------------------
-  // 4️⃣ Stage Guard (Enterprise)
-  // -----------------------------
+  // -------------------------------------------------
+  // 4️⃣ Stage Guard (Enterprise Flow Control)
+  // -------------------------------------------------
   if (context.stage === "PAYMENT" && intent !== "checkout") {
     return buildResponse(
       "You're already in checkout. Shall I complete the payment?",
@@ -56,9 +71,9 @@ export async function salesAgent(message, context) {
 
   let result;
 
-  // -----------------------------
-  // 5️⃣ Intent Router (Agents)
-  // -----------------------------
+  // -------------------------------------------------
+  // 5️⃣ Intent Router → Specialized Agents
+  // -------------------------------------------------
   switch (intent) {
     case "product_discovery":
       context.stage = "DISCOVERY";
@@ -91,6 +106,7 @@ export async function salesAgent(message, context) {
       if (result.status === "success") {
         context.stage = "SUCCESS";
         context.paymentStatus = "PAID";
+
         await fulfillmentAgent(context);
 
         return buildResponse(
@@ -111,7 +127,7 @@ export async function salesAgent(message, context) {
 
     default:
       return buildResponse(
-        "Sure! Tell me what you’re shopping for today.",
+        "Sure! Tell me what you are shopping for today.",
         context
       );
   }
