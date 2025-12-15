@@ -53,7 +53,7 @@ export async function runLLM({
 }) {
   try {
     const chatCompletion = await groq.chat.completions.create({
-      model: "openai/gpt-oss-120b", // Groq OSS model
+      model: "llama-3.3-70b-versatile", // Groq Llama 3.3 model
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
@@ -62,7 +62,7 @@ export async function runLLM({
       max_completion_tokens: maxTokens,
       top_p: 1,
       stream: false, // set true if you want streaming
-      reasoning_effort: "medium",
+
     });
 
     return chatCompletion.choices[0]?.message?.content?.trim() || "general_query";

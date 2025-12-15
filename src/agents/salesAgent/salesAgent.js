@@ -20,6 +20,7 @@ export async function salesAgent(message, context) {
   context.intent = context.intent || null;
   context.sessionId = context.sessionId || "unknown";
   context.channel = context.channel || "web";
+  context.offersApplied = context.offersApplied || [];
 
   // -------------------------------------------------
   // 1️⃣ Store Conversation Safely
@@ -50,12 +51,13 @@ export async function salesAgent(message, context) {
   // -------------------------------------------------
   // 3️⃣ Intent Detection (Cached First)
   // -------------------------------------------------
-  let intent = await getCachedIntent(context.sessionId);
+  // -------------------------------------------------
+  // 3️⃣ Intent Detection (Fresh on every turn)
+  // -------------------------------------------------
+  // Bug Fix: Previously cached intent by sessionId blocked new inputs. 
+  // We now detect intent for every message.
 
-  if (!intent) {
-    intent = await detectIntentLLM(message);
-    await cacheIntent(context.sessionId, intent);
-  }
+  let intent = await detectIntentLLM(message);
 
   context.intent = intent;
 
@@ -124,6 +126,13 @@ export async function salesAgent(message, context) {
       context.stage = "SUPPORT";
       result = await postPurchaseAgent(context);
       return buildResponse(result.summary, context);
+
+    case "general_query":
+      context.stage = "DISCOVERY";
+      return buildResponse(
+        "I can help you with product discovery, checking inventory, offers, and more. What would you like to do?",
+        context
+      );
 
     default:
       return buildResponse(
