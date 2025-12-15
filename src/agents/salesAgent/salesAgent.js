@@ -10,6 +10,31 @@ import { postPurchaseAgent } from "../postPurchaseAgent/postPurchaseAgent.js";
 import { detectIntentLLM } from "./intentDetector.llm.js";
 import { getCachedIntent, cacheIntent } from "./intentCache.js";
 
+import { SALES_PERSONA_PROMPT } from "./persona.js";
+import { runLLM } from "../../llm/llmClient.js";
+
+async function generatePersonaResponse(userMessage, systemAction, dataContext, intent, channel) {
+  const dataString = JSON.stringify(dataContext, null, 2);
+  const prompt = `
+    User Message: "${userMessage}"
+    System Action Performed: "${systemAction}"
+    Data Context: ${dataString}
+    Intent Detected: "${intent}"
+    Channel: "${channel}"
+
+    Based on the "System Action Performed" and "Data Context", generate a response to the user following your core behavior rules.
+    Do NOT mention "JSON" or "data context" or "system action".
+    Speak natural English as a helpful sales associate.
+    NOTE: If Channel is "voice", ensure you follow the Voice-specific rules strictly.
+  `;
+
+  return await runLLM({
+    systemPrompt: SALES_PERSONA_PROMPT,
+    userPrompt: prompt,
+    temperature: 0.7
+  });
+}
+
 export async function salesAgent(message, context) {
   // -------------------------------------------------
   // 0️⃣ ENTERPRISE CONTEXT NORMALIZATION (CRITICAL)
@@ -49,13 +74,8 @@ export async function salesAgent(message, context) {
   }
 
   // -------------------------------------------------
-  // 3️⃣ Intent Detection (Cached First)
-  // -------------------------------------------------
-  // -------------------------------------------------
   // 3️⃣ Intent Detection (Fresh on every turn)
   // -------------------------------------------------
-  // Bug Fix: Previously cached intent by sessionId blocked new inputs. 
-  // We now detect intent for every message.
 
   let intent = await detectIntentLLM(message);
 
@@ -65,13 +85,12 @@ export async function salesAgent(message, context) {
   // 4️⃣ Stage Guard (Enterprise Flow Control)
   // -------------------------------------------------
   if (context.stage === "PAYMENT" && intent !== "checkout") {
-    return buildResponse(
-      "You're already in checkout. Shall I complete the payment?",
-      context
-    );
+    const response = await generatePersonaResponse(message, "User tried to switch context during payment", {}, intent, context.channel);
+    return buildResponse(response, context);
   }
 
   let result;
+  let finalResponseText = "";
 
   // -------------------------------------------------
   // 5️⃣ Intent Router → Specialized Agents
@@ -80,64 +99,56 @@ export async function salesAgent(message, context) {
     case "product_discovery":
       context.stage = "DISCOVERY";
       result = await recommendationAgent(context);
-      return buildResponse(
-        `I found some great options for you. ${result.summary}`,
-        context
-      );
+      finalResponseText = await generatePersonaResponse(message, "Product Discovery Result", result, intent, context.channel);
+      break;
 
     case "check_inventory":
       context.stage = "DISCOVERY";
       result = await inventoryAgent(context);
-      return buildResponse(
-        `Here’s the availability update: ${result.summary}`,
-        context
-      );
+      finalResponseText = await generatePersonaResponse(message, "Inventory Check Result", result, intent, context.channel);
+      break;
 
     case "apply_offer":
       context.stage = "CART";
       result = await loyaltyAgent(context);
-      return buildResponse(
-        `Good news! I’ve applied the best offers. You save ₹${result.savings}`,
-        context
-      );
+      finalResponseText = await generatePersonaResponse(message, "Applied Offers", result, intent, context.channel);
+      break;
 
     case "checkout":
       context.stage = "PAYMENT";
       result = await paymentAgent(context);
-
       if (result.status === "success") {
         context.stage = "SUCCESS";
         context.paymentStatus = "PAID";
-
         await fulfillmentAgent(context);
-
-        return buildResponse(
-          "Payment successful! Your order is confirmed.",
-          context
-        );
+        finalResponseText = await generatePersonaResponse(message, "Payment Successful", result, intent, context.channel);
+      } else {
+        finalResponseText = await generatePersonaResponse(message, "Payment Failed", result, intent, context.channel);
       }
-
-      return buildResponse(
-        "Payment failed. Would you like to try another method?",
-        context
-      );
+      break;
 
     case "post_purchase":
       context.stage = "SUPPORT";
       result = await postPurchaseAgent(context);
-      return buildResponse(result.summary, context);
+      finalResponseText = await generatePersonaResponse(message, "Post Purchase Support", result, intent, context.channel);
+      break;
 
     case "general_query":
       context.stage = "DISCOVERY";
-      return buildResponse(
-        "I can help you with product discovery, checking inventory, offers, and more. What would you like to do?",
-        context
-      );
+      finalResponseText = await generatePersonaResponse(message, "General Query / Greeting", {}, intent, context.channel);
+      break;
 
     default:
-      return buildResponse(
-        "Sure! Tell me what you are shopping for today.",
-        context
-      );
+      finalResponseText = await generatePersonaResponse(message, "Unknown Intent / Default Greeting", {}, intent, context.channel);
+      break;
   }
+
+  // Store bot response in history
+  context.conversationHistory.push({
+    role: "assistant",
+    message: finalResponseText,
+    timestamp: new Date().toISOString()
+  });
+
+  return buildResponse(finalResponseText, context);
 }

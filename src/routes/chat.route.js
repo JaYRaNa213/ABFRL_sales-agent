@@ -13,12 +13,21 @@ router.post("/", async (req, res) => {
   const { message, sessionId, channel } = req.body;
 
   const sid = sessionId || uuid();
-  const context = getSession(sid, channel || "web");
+  const context = await getSession(sid, channel || "web"); // Added await
 
   const response = await salesAgent(message, context);
-  updateSession(sid, context);
+  await updateSession(sid, context); // Added await
 
   res.json(response);
+});
+
+router.get("/history/:sessionId", async (req, res) => {
+  const { sessionId } = req.params;
+  const context = await getSession(sessionId, "web");
+  res.json({
+    conversationHistory: context.conversationHistory || [],
+    cart: context.cart || []
+  });
 });
 
 /**
