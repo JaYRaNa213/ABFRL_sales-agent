@@ -1,0 +1,39 @@
+{
+    "loyaltyTiers": {
+        "SILVER": {
+            "discountPercent": 5
+        },
+        "GOLD": {
+            "discountPercent": 10
+        },
+        "PLATINUM": {
+            "discountPercent": 15
+        },
+        "BRONZE": {
+            "discountPercent": 2
+        }
+    },
+    "categoryOffers": [
+        {
+            "category": "Party Wear",
+            "discountPercent": 10
+        },
+        {
+            "category": "Winter Wear",
+            "discountPercent": 15
+        }
+    ],
+    "couponCodes": [
+        {
+            "code": "WELCOME500",
+            "minCartValue": 3000,
+            "discountAmount": 500
+        },
+        {
+            "code": "SALE20",
+            "minCartValue": 5000,
+            "discountPercent": 20,
+            "maxDiscount": 1500
+        }
+    ]
+}

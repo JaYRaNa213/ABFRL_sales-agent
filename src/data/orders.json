@@ -1,0 +1,24 @@
+[
+    {
+        "orderId": "ORD001",
+        "customerId": "CUST001",
+        "items": [
+            "SHIRT001",
+            "TROUSER001"
+        ],
+        "deliveryType": "Click & Collect",
+        "store": "Orion Mall",
+        "status": "Ready for Pickup",
+        "totalAmount": 5498
+    },
+    {
+        "orderId": "ORD002",
+        "customerId": "CUST002",
+        "items": [
+            "DRESS001"
+        ],
+        "deliveryType": "Home Delivery",
+        "status": "Delivered",
+        "totalAmount": 4999
+    }
+]

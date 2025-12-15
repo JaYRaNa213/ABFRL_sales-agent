@@ -1,0 +1,159 @@
+[
+    {
+        "customerId": "CUST001",
+        "name": "Rohit Sharma",
+        "age": 32,
+        "gender": "Male",
+        "city": "Bengaluru",
+        "loyaltyTier": "GOLD",
+        "preferredChannel": "mobile",
+        "stylePreferences": [
+            "formal",
+            "smart-casual"
+        ],
+        "pastPurchases": [
+            "SHIRT001",
+            "TROUSER002"
+        ]
+    },
+    {
+        "customerId": "CUST002",
+        "name": "Ananya Verma",
+        "age": 28,
+        "gender": "Female",
+        "city": "Mumbai",
+        "loyaltyTier": "PLATINUM",
+        "preferredChannel": "web",
+        "stylePreferences": [
+            "ethnic",
+            "party-wear"
+        ],
+        "pastPurchases": [
+            "DRESS001",
+            "KURTA002"
+        ]
+    },
+    {
+        "customerId": "CUST003",
+        "name": "Amit Singh",
+        "age": 40,
+        "gender": "Male",
+        "city": "Delhi",
+        "loyaltyTier": "SILVER",
+        "preferredChannel": "kiosk",
+        "stylePreferences": [
+            "casual"
+        ],
+        "pastPurchases": []
+    },
+    {
+        "customerId": "CUST004",
+        "name": "Neha Kapoor",
+        "age": 35,
+        "gender": "Female",
+        "city": "Pune",
+        "loyaltyTier": "GOLD",
+        "preferredChannel": "mobile",
+        "stylePreferences": [
+            "formal",
+            "western"
+        ],
+        "pastPurchases": [
+            "TOP001"
+        ]
+    },
+    {
+        "customerId": "CUST005",
+        "name": "Suresh Iyer",
+        "age": 45,
+        "gender": "Male",
+        "city": "Chennai",
+        "loyaltyTier": "PLATINUM",
+        "preferredChannel": "web",
+        "stylePreferences": [
+            "formal"
+        ],
+        "pastPurchases": [
+            "BLAZER002"
+        ]
+    },
+    {
+        "customerId": "CUST006",
+        "name": "Priya Reddy",
+        "age": 24,
+        "gender": "Female",
+        "city": "Hyderabad",
+        "loyaltyTier": "BRONZE",
+        "preferredChannel": "app",
+        "stylePreferences": [
+            "casual",
+            "trendy"
+        ],
+        "pastPurchases": [
+            "SKIRT001"
+        ]
+    },
+    {
+        "customerId": "CUST007",
+        "name": "Rahul Malhotra",
+        "age": 29,
+        "gender": "Male",
+        "city": "Chandigarh",
+        "loyaltyTier": "GOLD",
+        "preferredChannel": "web",
+        "stylePreferences": [
+            "streetwear"
+        ],
+        "pastPurchases": [
+            "JACKET001",
+            "JEANS001"
+        ]
+    },
+    {
+        "customerId": "CUST008",
+        "name": "Sneha Gupta",
+        "age": 31,
+        "gender": "Female",
+        "city": "Kolkata",
+        "loyaltyTier": "SILVER",
+        "preferredChannel": "mobile",
+        "stylePreferences": [
+            "ethnic"
+        ],
+        "pastPurchases": [
+            "KURTA001"
+        ]
+    },
+    {
+        "customerId": "CUST009",
+        "name": "Vikram Rathore",
+        "age": 38,
+        "gender": "Male",
+        "city": "Jaipur",
+        "loyaltyTier": "PLATINUM",
+        "preferredChannel": "store",
+        "stylePreferences": [
+            "traditional",
+            "formal"
+        ],
+        "pastPurchases": [
+            "SHIRT002"
+        ]
+    },
+    {
+        "customerId": "CUST010",
+        "name": "Meera Nair",
+        "age": 26,
+        "gender": "Female",
+        "city": "Kochi",
+        "loyaltyTier": "GOLD",
+        "preferredChannel": "app",
+        "stylePreferences": [
+            "casual",
+            "western"
+        ],
+        "pastPurchases": [
+            "DRESS002"
+        ]
+    }
+]

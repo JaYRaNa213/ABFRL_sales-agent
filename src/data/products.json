@@ -2,13 +2,474 @@
   {
     "sku": "SHIRT001",
     "name": "Formal Slim Fit Shirt",
-    "category": "Formal Wear",
-    "price": 2499
+    "brand": "Louis Philippe",
+    "category": "Men",
+    "subCategory": "Formal Wear",
+    "price": 2499,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "White",
+      "Blue"
+    ],
+    "fabric": "Cotton",
+    "tags": [
+      "office",
+      "bestseller"
+    ]
+  },
+  {
+    "sku": "SHIRT002",
+    "name": "Premium Cotton Shirt",
+    "brand": "Van Heusen",
+    "category": "Men",
+    "subCategory": "Formal Wear",
+    "price": 2799,
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Pink",
+      "Grey"
+    ],
+    "fabric": "Cotton",
+    "tags": [
+      "office"
+    ]
+  },
+  {
+    "sku": "SHIRT003",
+    "name": "Casual Checkered Shirt",
+    "brand": "Peter England",
+    "category": "Men",
+    "subCategory": "Casual Wear",
+    "price": 1899,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Red",
+      "Blue"
+    ],
+    "fabric": "Cotton Blend",
+    "tags": [
+      "weekend"
+    ]
+  },
+  {
+    "sku": "SHIRT004",
+    "name": "Party Satin Shirt",
+    "brand": "Louis Philippe",
+    "category": "Men",
+    "subCategory": "Party Wear",
+    "price": 3299,
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Black",
+      "Maroon"
+    ],
+    "fabric": "Satin",
+    "tags": [
+      "party"
+    ]
   },
   {
     "sku": "TROUSER001",
     "name": "Formal Trousers",
-    "category": "Formal Wear",
-    "price": 2999
+    "brand": "Allen Solly",
+    "category": "Men",
+    "subCategory": "Formal Wear",
+    "price": 2999,
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "colors": [
+      "Black"
+    ],
+    "fabric": "Poly-Viscose"
+  },
+  {
+    "sku": "TROUSER002",
+    "name": "Smart Casual Chinos",
+    "brand": "Allen Solly",
+    "category": "Men",
+    "subCategory": "Casual Wear",
+    "price": 2499,
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "colors": [
+      "Khaki",
+      "Navy"
+    ],
+    "fabric": "Cotton"
+  },
+  {
+    "sku": "TROUSER003",
+    "name": "Slim Fit Trousers",
+    "brand": "Van Heusen",
+    "category": "Men",
+    "subCategory": "Formal Wear",
+    "price": 2699,
+    "sizes": [
+      "32",
+      "34",
+      "36",
+      "38"
+    ],
+    "colors": [
+      "Grey",
+      "Charcoal"
+    ],
+    "fabric": "Poly-Wool"
+  },
+  {
+    "sku": "BLAZER001",
+    "name": "Premium Party Blazer",
+    "brand": "Louis Philippe",
+    "category": "Men",
+    "subCategory": "Party Wear",
+    "price": 7999,
+    "sizes": [
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Navy"
+    ],
+    "fabric": "Wool Blend",
+    "tags": [
+      "party",
+      "upsell"
+    ]
+  },
+  {
+    "sku": "BLAZER002",
+    "name": "Office Blazer",
+    "brand": "Van Heusen",
+    "category": "Men",
+    "subCategory": "Formal Wear",
+    "price": 6499,
+    "sizes": [
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Black",
+      "Grey"
+    ],
+    "fabric": "Poly-Viscose",
+    "tags": [
+      "office"
+    ]
+  },
+  {
+    "sku": "DRESS001",
+    "name": "Floral Party Dress",
+    "brand": "AND",
+    "category": "Women",
+    "subCategory": "Party Wear",
+    "price": 4999,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Red"
+    ],
+    "fabric": "Chiffon"
+  },
+  {
+    "sku": "DRESS002",
+    "name": "Summer Maxi Dress",
+    "brand": "Global Desi",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 2999,
+    "sizes": [
+      "S",
+      "M",
+      "XL"
+    ],
+    "colors": [
+      "Floral Blue"
+    ],
+    "fabric": "Cotton"
+  },
+  {
+    "sku": "DRESS003",
+    "name": "Elegant Sheath Dress",
+    "brand": "Van Heusen Woman",
+    "category": "Women",
+    "subCategory": "Formal Wear",
+    "price": 3499,
+    "sizes": [
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Black",
+      "Teal"
+    ],
+    "fabric": "Polyester Blend",
+    "tags": [
+      "office"
+    ]
+  },
+  {
+    "sku": "KURTA001",
+    "name": "Printed Kurta Set",
+    "brand": "Biba",
+    "category": "Women",
+    "subCategory": "Ethnic Wear",
+    "price": 3599,
+    "sizes": [
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Yellow"
+    ],
+    "fabric": "Rayon"
+  },
+  {
+    "sku": "KURTA002",
+    "name": "Embroidered Anarkali",
+    "brand": "W",
+    "category": "Women",
+    "subCategory": "Ethnic Wear",
+    "price": 5999,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Pink",
+      "Gold"
+    ],
+    "fabric": "Silk Blend",
+    "tags": [
+      "wedding"
+    ]
+  },
+  {
+    "sku": "KURTA003",
+    "name": "Daily Wear Kurta",
+    "brand": "Global Desi",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 1499,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Green",
+      "Orange"
+    ],
+    "fabric": "Cotton"
+  },
+  {
+    "sku": "TOP001",
+    "name": "Office Wear Top",
+    "brand": "Van Heusen",
+    "category": "Women",
+    "subCategory": "Formal Wear",
+    "price": 2299,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Black"
+    ],
+    "fabric": "Polyester"
+  },
+  {
+    "sku": "TOP002",
+    "name": "Casual Blouse",
+    "brand": "Forever 21",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 1299,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "White",
+      "Beige"
+    ],
+    "fabric": "Viscose"
+  },
+  {
+    "sku": "TOP003",
+    "name": "Sequin Top",
+    "brand": "Vero Moda",
+    "category": "Women",
+    "subCategory": "Party Wear",
+    "price": 2799,
+    "sizes": [
+      "XS",
+      "S",
+      "M"
+    ],
+    "colors": [
+      "Gold",
+      "Silver"
+    ],
+    "fabric": "Synthetic",
+    "tags": [
+      "party"
+    ]
+  },
+  {
+    "sku": "JACKET001",
+    "name": "Leather Jacket",
+    "brand": "US Polo",
+    "category": "Men",
+    "subCategory": "Winter Wear",
+    "price": 4999,
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Brown",
+      "Black"
+    ],
+    "fabric": "Faux Leather"
+  },
+  {
+    "sku": "JACKET002",
+    "name": "Winter Parka",
+    "brand": "Allen Solly",
+    "category": "Women",
+    "subCategory": "Winter Wear",
+    "price": 5499,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "Olive",
+      "Black"
+    ],
+    "fabric": "Nylon"
+  },
+  {
+    "sku": "JEANS001",
+    "name": "Slim Fit Jeans",
+    "brand": "Levis",
+    "category": "Men",
+    "subCategory": "Casual Wear",
+    "price": 3499,
+    "sizes": [
+      "30",
+      "32",
+      "34"
+    ],
+    "colors": [
+      "Blue"
+    ],
+    "fabric": "Denim"
+  },
+  {
+    "sku": "JEANS002",
+    "name": "Skinny High Rise Jeans",
+    "brand": "Levis",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 3299,
+    "sizes": [
+      "26",
+      "28",
+      "30"
+    ],
+    "colors": [
+      "Black"
+    ],
+    "fabric": "Denim"
+  },
+  {
+    "sku": "TSHIRT001",
+    "name": "Polo T-Shirt",
+    "brand": "US Polo",
+    "category": "Men",
+    "subCategory": "Casual Wear",
+    "price": 1599,
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      "Red",
+      "White",
+      "Navy"
+    ],
+    "fabric": "Cotton"
+  },
+  {
+    "sku": "TSHIRT002",
+    "name": "Graphic Tee",
+    "brand": "Only",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 999,
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "colors": [
+      "White"
+    ],
+    "fabric": "Cotton"
+  },
+  {
+    "sku": "SKIRT001",
+    "name": "A-Line Skirt",
+    "brand": "Allen Solly",
+    "category": "Women",
+    "subCategory": "Casual Wear",
+    "price": 1999,
+    "sizes": [
+      "28",
+      "30",
+      "32"
+    ],
+    "colors": [
+      "Navy"
+    ],
+    "fabric": "Cotton"
   }
 ]

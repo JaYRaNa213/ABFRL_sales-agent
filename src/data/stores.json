@@ -1,0 +1,17 @@
+[
+    {
+        "storeId": "STORE001",
+        "name": "Orion Mall",
+        "city": "Bengaluru"
+    },
+    {
+        "storeId": "STORE002",
+        "name": "Forum Mall",
+        "city": "Bengaluru"
+    },
+    {
+        "storeId": "STORE003",
+        "name": "Phoenix Mall",
+        "city": "Mumbai"
+    }
+]

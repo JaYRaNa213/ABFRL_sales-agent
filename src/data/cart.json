@@ -1,0 +1,22 @@
+{
+    "sessionId": "SESSION001",
+    "items": [
+        {
+            "sku": "SHIRT001",
+            "price": 2499,
+            "qty": 1,
+            "name": "Formal Slim Fit Shirt",
+            "size": "M"
+        },
+        {
+            "sku": "TROUSER001",
+            "price": 2999,
+            "qty": 1,
+            "name": "Formal Trousers",
+            "size": "32"
+        }
+    ],
+    "total": 5498,
+    "discount": 550,
+    "finalPayable": 4948
+}

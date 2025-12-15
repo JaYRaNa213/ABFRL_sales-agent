@@ -1,0 +1,13 @@
+{
+    "paymentMethods": [
+        "UPI",
+        "Card",
+        "Wallet",
+        "POS"
+    ],
+    "statusOptions": [
+        "SUCCESS",
+        "FAILED",
+        "PENDING"
+    ]
+}
