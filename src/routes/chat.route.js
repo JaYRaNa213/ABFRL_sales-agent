@@ -10,10 +10,12 @@ import { triggerWorkflow } from "../workflows/n8nHooks.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { message, sessionId, channel } = req.body;
+  const { message, sessionId, channel, language } = req.body;
 
   const sid = sessionId || uuid();
-  const context = await getSession(sid, channel || "web"); // Added await
+  const context = await getSession(sid, channel || "web");
+  context.language = language || "en-IN"; // Add language to context
+  context.channel = channel || "web"; // Ensure channel is updated from request if changed (e.g. voice override)
 
   const response = await salesAgent(message, context);
   await updateSession(sid, context); // Added await

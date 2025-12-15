@@ -13,7 +13,7 @@ import { getCachedIntent, cacheIntent } from "./intentCache.js";
 import { SALES_PERSONA_PROMPT } from "./persona.js";
 import { runLLM } from "../../llm/llmClient.js";
 
-async function generatePersonaResponse(userMessage, systemAction, dataContext, intent, channel) {
+async function generatePersonaResponse(userMessage, systemAction, dataContext, intent, channel, language) {
   const dataString = JSON.stringify(dataContext, null, 2);
   const prompt = `
     User Message: "${userMessage}"
@@ -21,6 +21,7 @@ async function generatePersonaResponse(userMessage, systemAction, dataContext, i
     Data Context: ${dataString}
     Intent Detected: "${intent}"
     Channel: "${channel}"
+    Language: "${language}"
 
     Based on the "System Action Performed" and "Data Context", generate a response to the user following your core behavior rules.
     Do NOT mention "JSON" or "data context" or "system action".
@@ -45,6 +46,7 @@ export async function salesAgent(message, context) {
   context.intent = context.intent || null;
   context.sessionId = context.sessionId || "unknown";
   context.channel = context.channel || "web";
+  context.language = context.language || "en-IN";
   context.offersApplied = context.offersApplied || [];
 
   // -------------------------------------------------
@@ -85,7 +87,7 @@ export async function salesAgent(message, context) {
   // 4️⃣ Stage Guard (Enterprise Flow Control)
   // -------------------------------------------------
   if (context.stage === "PAYMENT" && intent !== "checkout") {
-    const response = await generatePersonaResponse(message, "User tried to switch context during payment", {}, intent, context.channel);
+    const response = await generatePersonaResponse(message, "User tried to switch context during payment", {}, intent, context.channel, context.language);
     return buildResponse(response, context);
   }
 
@@ -99,19 +101,19 @@ export async function salesAgent(message, context) {
     case "product_discovery":
       context.stage = "DISCOVERY";
       result = await recommendationAgent(context);
-      finalResponseText = await generatePersonaResponse(message, "Product Discovery Result", result, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "Product Discovery Result", result, intent, context.channel, context.language);
       break;
 
     case "check_inventory":
       context.stage = "DISCOVERY";
       result = await inventoryAgent(context);
-      finalResponseText = await generatePersonaResponse(message, "Inventory Check Result", result, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "Inventory Check Result", result, intent, context.channel, context.language);
       break;
 
     case "apply_offer":
       context.stage = "CART";
       result = await loyaltyAgent(context);
-      finalResponseText = await generatePersonaResponse(message, "Applied Offers", result, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "Applied Offers", result, intent, context.channel, context.language);
       break;
 
     case "checkout":
@@ -121,25 +123,25 @@ export async function salesAgent(message, context) {
         context.stage = "SUCCESS";
         context.paymentStatus = "PAID";
         await fulfillmentAgent(context);
-        finalResponseText = await generatePersonaResponse(message, "Payment Successful", result, intent, context.channel);
+        finalResponseText = await generatePersonaResponse(message, "Payment Successful", result, intent, context.channel, context.language);
       } else {
-        finalResponseText = await generatePersonaResponse(message, "Payment Failed", result, intent, context.channel);
+        finalResponseText = await generatePersonaResponse(message, "Payment Failed", result, intent, context.channel, context.language);
       }
       break;
 
     case "post_purchase":
       context.stage = "SUPPORT";
       result = await postPurchaseAgent(context);
-      finalResponseText = await generatePersonaResponse(message, "Post Purchase Support", result, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "Post Purchase Support", result, intent, context.channel, context.language);
       break;
 
     case "general_query":
       context.stage = "DISCOVERY";
-      finalResponseText = await generatePersonaResponse(message, "General Query / Greeting", {}, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "General Query / Greeting", {}, intent, context.channel, context.language);
       break;
 
     default:
-      finalResponseText = await generatePersonaResponse(message, "Unknown Intent / Default Greeting", {}, intent, context.channel);
+      finalResponseText = await generatePersonaResponse(message, "Unknown Intent / Default Greeting", {}, intent, context.channel, context.language);
       break;
   }
 
