@@ -16,7 +16,7 @@ export async function recommendationAgent(context) {
   }
 
   // Brand Filter
-  const brands = ["louis philippe", "van heusen", "allen solly", "peter england", "manyavar", "biba", "and", "forever new", "global desi", "us polo"];
+  const brands = ["louis philippe", "van heusen", "allen solly", "peter england", "manyavar", "biba", "and", "forever new", "global desi", "us polo", "nike", "puma", "levi's", "wrangler", "pepe jeans", "blackberrys", "arrow", "samsung", "apple", "xiaomi", "milton", "cello", "roadster", "fabindia", "sojanya", "hush puppies", "titan", "noise", "fossil"];
   const brandMatch = brands.find(b => message.includes(b));
   if (brandMatch) {
     products = products.filter(p => p.brand.toLowerCase().includes(brandMatch));
@@ -24,7 +24,7 @@ export async function recommendationAgent(context) {
   }
 
   // Occasion/Tag Filter
-  const occasions = ["party", "office", "formal", "casual", "ethnic", "wedding", "festival"];
+  const occasions = ["party", "office", "formal", "casual", "ethnic", "wedding", "festival", "sports", "gym", "running", "fitness"];
   const occasionMatch = occasions.find(o => message.includes(o));
   if (occasionMatch) {
     products = products.filter(p =>
@@ -34,25 +34,50 @@ export async function recommendationAgent(context) {
     matchedCriteria.push(occasionMatch);
   }
 
-  // Category/Item Filter (Generic fallback if no specific attributes found, or addition to attributes)
-  const items = ["shirt", "t-shirt", "top", "dress", "kurta", "blazer", "suit", "jeans", "trouser", "skirt"];
-  const itemMatch = items.find(i => message.includes(i));
-  if (itemMatch) {
-    products = products.filter(p =>
-      p.name.toLowerCase().includes(itemMatch) ||
-      p.subCategory.toLowerCase().includes(itemMatch)
-    );
-    matchedCriteria.push(itemMatch);
+  // STRICT Category/Item Filter - MOST IMPORTANT
+  // Map user intent to exact product categories
+  const categoryMap = {
+    "shirt": ["Shirts", "Formal Wear"],
+    "t-shirt": ["T-Shirts"],
+    "tshirt": ["T-Shirts"],
+    "top": ["Tops"],
+    "dress": ["Dresses", "Party Wear"],
+    "kurta": ["Kurta", "Ethnic Wear"],
+    "kurti": ["Kurta", "Ethnic Wear"],
+    "blazer": ["Blazer"],
+    "suit": ["Suits"],
+    "jeans": ["Jeans"],
+    "trouser": ["Pants"],
+    "pants": ["Pants"],
+    "shoe": ["Shoes"],
+    "shoes": ["Shoes"],
+    "sneaker": ["Shoes"],
+    "watch": ["Watches"],
+    "mobile": ["Mobiles"],
+    "phone": ["Mobiles"],
+    "bottle": ["Bottles"]
+  };
+
+  let categoryMatched = false;
+  for (const [keyword, categories] of Object.entries(categoryMap)) {
+    if (message.includes(keyword)) {
+      products = products.filter(p =>
+        categories.some(cat =>
+          p.subCategory.includes(cat) ||
+          p.name.toLowerCase().includes(keyword)
+        )
+      );
+      matchedCriteria.push(keyword);
+      categoryMatched = true;
+      break; // Only match ONE category
+    }
   }
 
-  // Fallback: If no strict filters applied and no products found, do a broad search or return top picks
-  if (matchedCriteria.length === 0) {
-    products = searchProducts(message);
-    if (products.length === 0) {
-      // Ultimate fallback
-      products = getAllProducts().slice(0, 5);
-      matchedCriteria.push("Top Picks");
-    }
+  // If no specific category matched, do NOT show random products
+  if (!categoryMatched && matchedCriteria.length === 0) {
+    // Fallback: show top 5 popular items
+    products = getAllProducts().slice(0, 5);
+    matchedCriteria.push("Top Picks");
   }
 
   // 2. Selection & Formatting
