@@ -1,5 +1,5 @@
 export async function postPurchaseAgent(context) {
   return {
-    summary: "I can help you with returns, exchanges, or order tracking."
+    options: ["Track Order", "Return Item", "Exchange Size", "Feedback"]
   };
 }

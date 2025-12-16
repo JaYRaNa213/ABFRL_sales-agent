@@ -17,6 +17,8 @@ router.post("/", async (req, res) => {
   context.language = language || "en-IN"; // Add language to context
   context.channel = channel || "web"; // Ensure channel is updated from request if changed (e.g. voice override)
 
+  context.inputMode = inputMode || "text"; 
+
   const response = await salesAgent(message, context);
   await updateSession(sid, context); // Added await
 

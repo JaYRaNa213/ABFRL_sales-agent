@@ -7,6 +7,7 @@
         "city": "Bengaluru",
         "loyaltyTier": "GOLD",
         "preferredChannel": "mobile",
+        "preferredStore": "Orion Mall",
         "stylePreferences": [
             "formal",
             "smart-casual"
@@ -24,6 +25,7 @@
         "city": "Mumbai",
         "loyaltyTier": "PLATINUM",
         "preferredChannel": "web",
+        "preferredStore": "Phoenix Mall",
         "stylePreferences": [
             "ethnic",
             "party-wear"
@@ -41,6 +43,7 @@
         "city": "Delhi",
         "loyaltyTier": "SILVER",
         "preferredChannel": "kiosk",
+        "preferredStore": "Delhi Mall",
         "stylePreferences": [
             "casual"
         ],
@@ -54,6 +57,7 @@
         "city": "Pune",
         "loyaltyTier": "GOLD",
         "preferredChannel": "mobile",
+        "preferredStore": "Orion Mall",
         "stylePreferences": [
             "formal",
             "western"
@@ -70,6 +74,7 @@
         "city": "Chennai",
         "loyaltyTier": "PLATINUM",
         "preferredChannel": "web",
+        "preferredStore": "Rama Mall",
         "stylePreferences": [
             "formal"
         ],
@@ -85,6 +90,7 @@
         "city": "Hyderabad",
         "loyaltyTier": "BRONZE",
         "preferredChannel": "app",
+        "preferredStore": "AAM Mall",
         "stylePreferences": [
             "casual",
             "trendy"
@@ -101,6 +107,7 @@
         "city": "Chandigarh",
         "loyaltyTier": "GOLD",
         "preferredChannel": "web",
+        "preferredStore": "Chandigarh Plaza",
         "stylePreferences": [
             "streetwear"
         ],
@@ -116,7 +123,9 @@
         "gender": "Female",
         "city": "Kolkata",
         "loyaltyTier": "SILVER",
-        "preferredChannel": "mobile",
+        "preferredChannel": "web",
+        "preferredStore": "kali Mall",
+
         "stylePreferences": [
             "ethnic"
         ],
@@ -132,6 +141,7 @@
         "city": "Jaipur",
         "loyaltyTier": "PLATINUM",
         "preferredChannel": "store",
+        "preferredStore": "judio Mall",
         "stylePreferences": [
             "traditional",
             "formal"
@@ -147,7 +157,8 @@
         "gender": "Female",
         "city": "Kochi",
         "loyaltyTier": "GOLD",
-        "preferredChannel": "app",
+        "preferredChannel": "web",
+        "preferredStore": "judio Mall",
         "stylePreferences": [
             "casual",
             "western"
