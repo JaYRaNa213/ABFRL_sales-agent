@@ -51,6 +51,11 @@ export async function salesAgent(message, context) {
   context.offersApplied = context.offersApplied || [];
 
   // -------------------------------------------------
+  // Channel Normalization for Persona
+  // -------------------------------------------------
+  const normalizedChannel = context.channel === "voice" ? "voice" : "text"; // Treat web/whatsapp as text
+
+  // -------------------------------------------------
   // 1️⃣ Store Conversation Safely
   // -------------------------------------------------
   context.conversationHistory.push({
@@ -88,7 +93,7 @@ export async function salesAgent(message, context) {
   // 4️⃣ Stage Guard (Enterprise Flow Control)
   // -------------------------------------------------
   if (context.stage === "PAYMENT" && intent !== "checkout") {
-    const response = await generatePersonaResponse(message, "User tried to switch context during payment", {}, intent, context.channel, context.language);
+    const response = await generatePersonaResponse(message, "User tried to switch context during payment", {}, intent, normalizedChannel, context.language);
     return buildResponse(response, context);
   }
 
@@ -110,11 +115,13 @@ export async function salesAgent(message, context) {
         context.action = "SHOW_PRODUCTS";
         context.target = "AgentPanel";
         context.layout = "cards";
-        finalResponseText = null; // Suppress text
+        // Generate response based on channel (text = concise, voice = conversational)
+        finalResponseText = await generatePersonaResponse(message, "Product Discovery - Products Found", result, intent, normalizedChannel, context.language);
+
       } else {
         // Fallback to text if no products found
         context.products = [];
-        finalResponseText = await generatePersonaResponse(message, "Product Discovery - No results found", result, intent, context.channel, context.language);
+        finalResponseText = await generatePersonaResponse(message, "Product Discovery - No results found", result, intent, normalizedChannel, context.language);
       }
       break;
 
@@ -125,13 +132,14 @@ export async function salesAgent(message, context) {
 
       if (result.products && result.products.length > 0) {
         context.products = result.products;
-        context.action = "SHOW_PRODUCTS"; // Re-use same action for consistency
+        context.action = "SHOW_PRODUCTS";
         context.target = "AgentPanel";
         context.layout = "cards";
-        finalResponseText = null;
+        // Generate response based on channel (text = concise, voice = conversational)
+        finalResponseText = await generatePersonaResponse(message, "Inventory Check - Products Available", result, intent, normalizedChannel, context.language);
       } else {
         context.products = [];
-        finalResponseText = await generatePersonaResponse(message, "Inventory Check Result", result, intent, context.channel, context.language);
+        finalResponseText = await generatePersonaResponse(message, "Inventory Check Result", result, intent, normalizedChannel, context.language);
       }
       break;
 
@@ -139,40 +147,40 @@ export async function salesAgent(message, context) {
       context.stage = "CART";
       result = await loyaltyAgent(context);
       context.products = []; // Clear products on other actions usually
-      finalResponseText = await generatePersonaResponse(message, "Applied Offers", result, intent, context.channel, context.language);
+      finalResponseText = await generatePersonaResponse(message, "Applied Offers", result, intent, normalizedChannel, context.language);
       break;
 
     case "checkout":
-      context.stage = "PAYMENT";
-      result = await paymentAgent(context);
-      context.products = [];
-      if (result.status === "success") {
-        context.stage = "SUCCESS";
-        context.paymentStatus = "PAID";
-        await fulfillmentAgent(context);
-        finalResponseText = await generatePersonaResponse(message, "Payment Successful", result, intent, context.channel, context.language);
-      } else {
-        finalResponseText = await generatePersonaResponse(message, "Payment Failed", result, intent, context.channel, context.language);
-      }
+      // context.stage = "PAYMENT";
+      // result = await paymentAgent(context);
+      // context.products = [];
+      // if (result.status === "success") {
+      //   context.stage = "SUCCESS";
+      //   context.paymentStatus = "PAID";
+      //   // await fulfillmentAgent(context);
+      //   finalResponseText = await generatePersonaResponse(message, "Payment Successful", result, intent, context.channel, context.language);
+      // } else {
+      //   finalResponseText = await generatePersonaResponse(message, "Payment Failed", result, intent, context.channel, context.language);
+      // }
       break;
 
     case "post_purchase":
       context.stage = "SUPPORT";
       result = await postPurchaseAgent(context);
       context.products = [];
-      finalResponseText = await generatePersonaResponse(message, "Post Purchase Support", result, intent, context.channel, context.language);
+      finalResponseText = await generatePersonaResponse(message, "Post Purchase Support", result, intent, normalizedChannel, context.language);
       break;
 
     case "general_query":
       context.stage = "DISCOVERY";
       context.products = [];
-      finalResponseText = await generatePersonaResponse(message, "General Query / Greeting", {}, intent, context.channel, context.language);
+      finalResponseText = await generatePersonaResponse(message, "General Query / Greeting", {}, intent, normalizedChannel, context.language);
       break;
 
     default:
       context.products = [];
       console.log("DEBUG: Default case, no products"); // DEBUG LOG
-      finalResponseText = await generatePersonaResponse(message, "Unknown Intent / Default Greeting", {}, intent, context.channel, context.language);
+      finalResponseText = await generatePersonaResponse(message, "Unknown Intent / Default Greeting", {}, intent, normalizedChannel, context.language);
       break;
   }
 
@@ -183,5 +191,8 @@ export async function salesAgent(message, context) {
     timestamp: new Date().toISOString()
   });
 
+
   return buildResponse(finalResponseText, context);
+
+
 }
