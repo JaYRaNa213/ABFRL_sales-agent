@@ -45,6 +45,24 @@ export async function salesAgent(message, context) {
       agentResult = await loyaltyAgent(context);
       break;
 
+    case "select_product":
+      // User picked a product (e.g. "I like the black shoes")
+      // Logic: If context.products exists, try to find the one user mentioned OR simply keep the first one/most relevant
+      if (context.products && context.products.length > 0) {
+        // SIMPLIFICATION: If user says "the leather one", we ideally use an Entity Extractor.
+        // For now, we assume the user is refining the list.
+        // Let's keep the Top 1 as the "Selected" one for the flow.
+        context.products = [context.products[0]];
+        context.action = "PRODUCT_SELECTED";
+      }
+      break;
+
+    case "add_to_cart":
+      context.action = "add_to_cart"; // Tell Inventory Agent what to do
+      context.orchestration.push({ agent: "InventoryAgent", action: "add" });
+      await inventoryAgent(context);
+      break;
+
     case "checkout":
       context.orchestration.push({ agent: "PaymentAgent" });
       agentResult = await paymentAgent(context);
@@ -52,6 +70,7 @@ export async function salesAgent(message, context) {
       if (agentResult.status === "success") {
         context.orchestration.push({ agent: "FulfillmentAgent" });
         await fulfillmentAgent(context);
+        agentResult.fulfillment = context.fulfillment; // Pass to persona
       }
       break;
 
