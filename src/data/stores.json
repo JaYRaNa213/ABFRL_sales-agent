@@ -1,17 +1,52 @@
 [
-    {
-        "storeId": "STORE001",
-        "name": "Orion Mall",
-        "city": "Bengaluru"
-    },
-    {
-        "storeId": "STORE002",
-        "name": "Forum Mall",
-        "city": "Bengaluru"
-    },
-    {
-        "storeId": "STORE003",
-        "name": "Phoenix Mall",
-        "city": "Mumbai"
-    }
+  {
+    "storeId": "STORE001",
+    "name": "Orion Mall",
+    "city": "Bengaluru"
+  },
+  {
+    "storeId": "STORE002",
+    "name": "Forum Mall",
+    "city": "Bengaluru"
+  },
+  {
+    "storeId": "STORE003",
+    "name": "Phoenix Mall",
+    "city": "Mumbai"
+  },
+  {
+    "storeId": "STORE004",
+    "name": "Delhi Mall",
+    "city": "Delhi"
+  },
+  {
+    "storeId": "STORE005",
+    "name": "Rama Mall",
+    "city": "Chennai"
+  },
+  {
+    "storeId": "STORE006",
+    "name": "AAM Mall",
+    "city": "Hyderabad"
+  },
+  {
+    "storeId": "STORE007",
+    "name": "Chandigarh Plaza",
+    "city": "Chandigarh"
+  },
+  {
+    "storeId": "STORE008",
+    "name": "Kali Mall",
+    "city": "Kolkata"
+  },
+  {
+    "storeId": "STORE009",
+    "name": "Judio Mall",
+    "city": "Jaipur"
+  },
+  {
+    "storeId": "STORE010",
+    "name": "Judio Mall Kochi",
+    "city": "Kochi"
+  }
 ]

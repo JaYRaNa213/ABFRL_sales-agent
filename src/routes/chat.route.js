@@ -10,12 +10,15 @@ import { salesAgent } from "../agents/salesAgent/salesAgent.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { message, sessionId, channel, language } = req.body;
+  const { message, sessionId, channel, language, inputMode } = req.body;
 
   const sid = sessionId || uuid();
   const context = await getSession(sid, channel || "web");
   context.language = language || "en-IN"; // Add language to context
   context.channel = channel || "web"; // Ensure channel is updated from request if changed (e.g. voice override)
+
+  // Preserve existing context inputMode if not provided in request, default to text only if neither exists
+  context.inputMode = inputMode || context.inputMode || "text";
 
   const response = await salesAgent(message, context);
   await updateSession(sid, context); // Added await
@@ -93,7 +96,7 @@ router.get("/history/:sessionId", async (req, res) => {
 //       error: "Internal server error",
 //       message: error.message
 //     });
-  // }
+// }
 // });
 
 export default router;

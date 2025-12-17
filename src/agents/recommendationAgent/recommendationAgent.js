@@ -1,90 +1,63 @@
-import { getProductsByCategory, searchProducts, getAllProducts } from "../../services/productCatalog.service.js";
+import { getAllProducts } from "../../services/productCatalog.service.js";
+import { getCustomer } from "../../services/loyalty.service.js";
 
 export async function recommendationAgent(context) {
-  // 1. Strict Attribute Extraction & Filtering
-  const message = context.lastMessage ? context.lastMessage.toLowerCase() : "";
+  const customer = getCustomer(context.customerId || "CUST001");
+  context.customerProfile = customer;
+
+  const intentText = context.lastMessage.toLowerCase();
   let products = getAllProducts();
-  let matchedCriteria = [];
 
-  // Gender Filter
-  if (message.includes("women") || message.includes("lady") || message.includes("ladies") || message.includes("girl")) {
-    products = products.filter(p => p.category === "Women");
-    matchedCriteria.push("Women");
-  } else if (message.includes("men") || message.includes("man") || message.includes("boy") || message.includes("guy")) {
-    products = products.filter(p => p.category === "Men");
-    matchedCriteria.push("Men");
-  }
+  // DYNAMIC FILTERING LOGIC
+  // We explicitly check for common terms in the user's message
+  // against product metadata (Category, SubCategory, Tags, Name, Brand)
 
-  // Brand Filter
-  const brands = ["louis philippe", "van heusen", "allen solly", "peter england", "manyavar", "biba", "and", "forever new", "global desi", "us polo", "nike", "puma", "levi's", "wrangler", "pepe jeans", "blackberrys", "arrow", "samsung", "apple", "xiaomi", "milton", "cello", "roadster", "fabindia", "sojanya", "hush puppies", "titan", "noise", "fossil"];
-  const brandMatch = brands.find(b => message.includes(b));
-  if (brandMatch) {
-    products = products.filter(p => p.brand.toLowerCase().includes(brandMatch));
-    matchedCriteria.push(brandMatch);
-  }
+  const tokens = intentText.split(/\s+/).filter(t => t.length > 2); // Simple tokenization
 
-  // Occasion/Tag Filter
-  const occasions = ["party", "office", "formal", "casual", "ethnic", "wedding", "festival", "sports", "gym", "running", "fitness"];
-  const occasionMatch = occasions.find(o => message.includes(o));
-  if (occasionMatch) {
-    products = products.filter(p =>
-      p.tags.some(t => t.toLowerCase().includes(occasionMatch)) ||
-      p.subCategory.toLowerCase().includes(occasionMatch)
-    );
-    matchedCriteria.push(occasionMatch);
-  }
+  let filtered = products.filter(p => {
+    const textToSearch = [
+      p.category,
+      p.subCategory,
+      p.name,
+      p.brand,
+      ...(p.tags || []),
+      ...(p.colors || [])
+    ].join(" ").toLowerCase();
 
-  // STRICT Category/Item Filter - MOST IMPORTANT
-  // Map user intent to exact product categories
-  const categoryMap = {
-    "shirt": ["Shirts", "Formal Wear"],
-    "t-shirt": ["T-Shirts"],
-    "tshirt": ["T-Shirts"],
-    "top": ["Tops"],
-    "dress": ["Dresses", "Party Wear"],
-    "kurta": ["Kurta", "Ethnic Wear"],
-    "kurti": ["Kurta", "Ethnic Wear"],
-    "blazer": ["Blazer"],
-    "suit": ["Suits"],
-    "jeans": ["Jeans"],
-    "trouser": ["Pants"],
-    "pants": ["Pants"],
-    "shoe": ["Shoes"],
-    "shoes": ["Shoes"],
-    "sneaker": ["Shoes"],
-    "watch": ["Watches"],
-    "mobile": ["Mobiles"],
-    "phone": ["Mobiles"],
-    "bottle": ["Bottles"]
-  };
+    // Check if ANY token matches the product metadata
+    // Priority to exact substring matches (e.g. "watch" in "Watches")
+    return tokens.some(token => textToSearch.includes(token));
+  });
 
-  let categoryMatched = false;
-  for (const [keyword, categories] of Object.entries(categoryMap)) {
-    if (message.includes(keyword)) {
-      products = products.filter(p =>
-        categories.some(cat =>
-          p.subCategory.includes(cat) ||
-          p.name.toLowerCase().includes(keyword)
-        )
-      );
-      matchedCriteria.push(keyword);
-      categoryMatched = true;
-      break; // Only match ONE category
+  // Fallback: If no strict match, but user asked for "products" generally
+  if (filtered.length === 0) {
+    if (intentText.includes("top") || intentText.includes("best")) {
+      filtered = products.filter(p => p.tags.includes("bestseller"));
+    }
+    else {
+      // Default to a mixed bag or keep all if purely discovery
+      // For now, let's return Bestsellers/New Arrivals as "Featured"
+      // filtered = products.slice(0, 5); 
+      // Better strategy: Don't show random things if we really don't know. 
+      // But for a demo, showing features is better than empty.
+      filtered = products.filter(p => p.tags.includes("bestseller") || p.tag === "new");
     }
   }
 
-  // If no specific category matched, do NOT show random products
-  if (!categoryMatched && matchedCriteria.length === 0) {
-    // Fallback: show top 5 popular items
-    products = getAllProducts().slice(0, 5);
-    matchedCriteria.push("Top Picks");
+  // PERSONALIZATION SORTING
+  if (customer?.loyaltyTier === "PLATINUM") {
+    filtered = filtered.sort((a, b) => b.price - a.price);
   }
 
-  // 2. Selection & Formatting
-  const topProducts = products.slice(0, 5);
+  context.products = filtered.slice(0, 4);
+
+  // Update action to ensure panel shows them
+  context.action = "SHOW_PRODUCTS";
+  context.target = "AgentPanel";
 
   return {
-    summary: matchedCriteria.length > 0 ? `Found matches for ${matchedCriteria.join(", ")}` : "Here are some recommendations.",
-    products: topProducts
+    reason: filtered.length > 0 ? "Matched keywords" : "Default recommendations",
+    count: filtered.length,
+    loyaltyTier: customer?.loyaltyTier
   };
 }

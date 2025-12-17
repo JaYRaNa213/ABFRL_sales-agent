@@ -2,14 +2,24 @@ export function createInitialContext({ sessionId, channel }) {
   return {
     sessionId,
     channel,
-    stage: "INIT", // 👈 IMPORTANT
+    inputMode: "text",   // 🔥 FIXED
+    stage: "INIT",
     intent: null,
+
+    customerProfile: null,
     cart: [],
     offersApplied: [],
-    paymentStatus: null,
+    orchestration: [],   // 🔥 VISIBLE AGENT FLOW
+
     fulfillment: null,
+    paymentStatus: null,
+
     conversationHistory: [],
     lastMessage: null,
-    metadata: {}
+
+    metadata: {
+      store: null,
+      season: "festive"
+    }
   };
 }
