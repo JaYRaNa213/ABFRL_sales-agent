@@ -10,7 +10,7 @@ import { salesAgent } from "../agents/salesAgent/salesAgent.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { message, sessionId, channel, language } = req.body;
+  const { message, sessionId, channel, language,inputMode } = req.body;
 
   const sid = sessionId || uuid();
   const context = await getSession(sid, channel || "web");
