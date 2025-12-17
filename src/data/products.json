@@ -156,18 +156,7 @@
     "tags": ["formal", "office"],
     "image": "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4"
   },
-  {
-    "sku": "SHO002",
-    "name": "Casual Sneakers",
-    "brand": "Puma",
-    "category": "Men",
-    "subCategory": "Shoes",
-    "price": 2999,
-    "sizes": ["7", "8", "9", "10"],
-    "colors": ["White"],
-    "tags": ["casual", "daily"],
-    "image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db"
-  },
+ 
   {
     "sku": "SHO003",
     "name": "Running Sports Shoes",
